@@ -1,0 +1,40 @@
+# OriginClient 本地通信协议模拟器配置
+# 本目录可单独复制到任何位置运行，不依赖 OriginClient 的源码或运行进程。
+
+web:
+  host: 127.0.0.1
+  port: 9130
+  open_browser: true
+
+mqtt:
+  # OriginClient 调试时将 Broker 地址设置为 mqtt://127.0.0.1:3333
+  host: 127.0.0.1
+  port: 3333
+  qos: 1
+  # 正式协议要求客户端 Client ID 填所连接机器人的 ID。
+  # 本地模拟器不强制拒绝其他 ID，但 GUI 会显示实际连接的 Client ID。
+  expected_client_id: "1"
+
+udp_video:
+  # 将下面的占位路径改为本机视频的绝对路径，支持 mp4/mov/mkv/avi 等 FFmpeg 可读格式。
+  video_path: "/home/ljy/123/OriginClientProtocolSimulator/test1.mp4"
+  loop: true
+  start_on_launch: false
+  target_host: 127.0.0.1
+  target_port: 3334
+  width: 1920
+  height: 1080
+  fps: 60
+  bitrate_kbps: 4000
+  gop: 60
+  # PDF 规定 UDP 包最大 1400 字节，8 字节协议头后负载最大 1392 字节。
+  fragment_payload_bytes: 1392
+  # 用于测试客户端抗丢包行为，正常联调保持 0。
+  packet_loss_percent: 0
+
+protocol:
+  # 使用模拟器自带的 V2.0.0 proto，运行时不读取 OriginClient 目录。
+  proto_file: "./proto/messages.proto"
+  # RobotStaticStatus、RobotPosition、Buff 的 robot_id 以及 RobotPathPlanInfo 的 sender_id。
+  # 合法范围为 1-7 或 101-107，未填写时默认为 1。
+  robot_id: 1
